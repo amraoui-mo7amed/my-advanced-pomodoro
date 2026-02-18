@@ -2,63 +2,36 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
-const userDataPath = app.getPath('userData');
-const dbPath = path.join(userDataPath, 'db.json');
-
-// Initialize DB if not exists
-if (!fs.existsSync(dbPath)) {
-  fs.writeFileSync(dbPath, JSON.stringify({ projects: [] }, null, 2));
-}
+const DATA_FILE = path.join(app.getPath('userData'), 'data.json');
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 1000,
-    height: 700,
-    backgroundColor: '#F8F9FA',
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
-      contextIsolation: true,
-    },
-    titleBarStyle: 'hiddenInset'
-  });
+    const win = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false
+        }
+    });
 
-  win.loadFile('index.html');
+    win.loadFile('index.html');
 }
 
-// IPC Handlers for DB operations
-ipcMain.handle('save-projects', (event, projects) => {
-  try {
-    fs.writeFileSync(dbPath, JSON.stringify({ projects }, null, 2));
-    return { success: true };
-  } catch (err) {
-    console.error('Failed to save projects:', err);
-    return { success: false, error: err.message };
-  }
-});
-
-ipcMain.handle('load-projects', () => {
-  try {
-    const data = fs.readFileSync(dbPath, 'utf8');
-    return JSON.parse(data).projects;
-  } catch (err) {
-    console.error('Failed to load projects:', err);
-    return [];
-  }
-});
-
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+ipcMain.handle('db-load', async () => {
+    if (fs.existsSync(DATA_FILE)) {
+        return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
     }
-  });
+    return {};
 });
+
+ipcMain.handle('db-save', async (event, data) => {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data));
+    return true;
+});
+
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+    if (process.platform !== 'darwin') app.quit();
 });
