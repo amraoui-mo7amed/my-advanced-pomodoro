@@ -1,0 +1,17 @@
+{
+  "name": "my-pomodoro-manager",
+  "version": "1.0.0",
+  "description": "An advanced, premium Pomodoro application built with Electron, designed for deep work and project-based productivity tracking.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . --no-sandbox --disable-gpu",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electorn": "^0.0.1-security",
+    "electron": "^31.7.7"
+  }
+}

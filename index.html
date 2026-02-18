@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Pomodoro Manager</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="dark-mode">
+    <div id="app">
+        <aside id="sidebar">
+            <h2>Projects</h2>
+            <button id="add-project-btn">Create New Project</button>
+            <ul id="project-list"></ul>
+        </aside>
+        
+        <main id="timer-area">
+            <div id="session-tabs">
+                <button class="tab active" data-type="work">Work</button>
+                <button class="tab" data-type="short">Short Break</button>
+                <button class="tab" data-type="long">Long Break</button>
+            </div>
+            
+            <div id="timer-display">25:00</div>
+            <div id="active-project-name">Work</div>
+            
+            <div id="controls">
+                <button id="toggle-btn">START</button>
+                <button id="reset-btn">RESET</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="modal-overlay" class="hidden">
+        <div id="project-modal">
+            <div class="modal-header">
+                <h3>New Project</h3>
+                <div class="modal-subtitle">Configure your focus workspace</div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Title</label>
+                    <input type="text" id="proj-name" placeholder="E.g. Study Coding">
+                </div>
+                <div class="input-group" id="icon-group">
+                    <label>Icon</label>
+                    <button type="button" id="icon-selector-btn" class="icon-picker-trigger">📁</button>
+                    <input type="hidden" id="proj-icon" value="📁">
+                </div>
+            </div>
+            
+            <div class="time-grid">
+                <div class="input-group">
+                    <label>Work</label>
+                    <div class="custom-counter">
+                        <button type="button" onclick="decrement('work-min')">−</button>
+                        <input type="number" id="work-min" value="25" min="1" max="120">
+                        <button type="button" onclick="increment('work-min')">+</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Short</label>
+                    <div class="custom-counter">
+                        <button type="button" onclick="decrement('short-min')">−</button>
+                        <input type="number" id="short-min" value="5" min="1" max="30">
+                        <button type="button" onclick="increment('short-min')">+</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Long</label>
+                    <div class="custom-counter">
+                        <button type="button" onclick="decrement('long-min')">−</button>
+                        <input type="number" id="long-min" value="15" min="1" max="60">
+                        <button type="button" onclick="increment('long-min')">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-btns">
+                <button id="cancel-btn">Cancel</button>
+                <button id="create-btn">Create Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Icon Selector Modal -->
+    <div id="icon-modal-overlay" class="hidden">
+        <div id="icon-modal">
+            <div class="modal-header">
+                <h3>Select Icon</h3>
+                <div class="modal-subtitle">Choose a visual identity for your project</div>
+            </div>
+            <div id="icon-grid" class="icon-grid">
+                <!-- Icons will be injected here -->
+            </div>
+            <div class="modal-btns">
+                <button id="close-icon-modal-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
