@@ -39,3 +39,6 @@ ENV/
 .idea/
 *.swp
 *.swo
+data/*
+database.db
+app_database.db
